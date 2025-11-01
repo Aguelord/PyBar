@@ -4,6 +4,7 @@ Main application entry point using Kivy framework
 """
 
 import os
+# Set Kivy GL backend before importing Kivy modules
 os.environ['KIVY_GL_BACKEND'] = 'sdl2'
 
 from kivy.app import App

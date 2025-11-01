@@ -6,6 +6,8 @@ This script tests the barcode detector with a sample image
 from barcode_detector import BarcodeDetector
 from PIL import Image, ImageDraw, ImageFont
 import sys
+import tempfile
+import os
 
 def create_demo_barcode(barcode_number="1234567890128"):
     """Create a demo barcode image"""
@@ -46,8 +48,12 @@ def main():
     # Create demo barcode
     print("Creating demo barcode image...")
     demo_image, actual_barcode = create_demo_barcode()
-    demo_path = '/tmp/demo_barcode.png'
-    demo_image.save(demo_path)
+    
+    # Use temporary file for cross-platform compatibility
+    with tempfile.NamedTemporaryFile(mode='wb', suffix='.png', delete=False) as tmp_file:
+        demo_image.save(tmp_file.name)
+        demo_path = tmp_file.name
+    
     print(f"✓ Demo barcode saved to: {demo_path}")
     print(f"  Actual barcode number: {actual_barcode}")
     print()
@@ -112,6 +118,12 @@ def main():
     print("   adb install bin/pybar-1.0-arm64-v8a-debug.apk")
     print()
     print("=" * 60)
+    
+    # Clean up temporary file
+    try:
+        os.unlink(demo_path)
+    except:
+        pass
     
     return 0
 

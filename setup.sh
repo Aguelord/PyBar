@@ -28,7 +28,16 @@ fi
 
 # Install Python dependencies
 echo "Installing Python dependencies..."
-pip install -r requirements.txt --index-url https://download.pytorch.org/whl/cpu
+echo ""
+
+# Check if CUDA is available for GPU support
+if command -v nvidia-smi &> /dev/null; then
+    echo "✓ NVIDIA GPU detected, installing PyTorch with CUDA support"
+    pip install -r requirements.txt
+else
+    echo "ℹ No NVIDIA GPU detected, installing CPU-only PyTorch"
+    pip install -r requirements.txt --index-url https://download.pytorch.org/whl/cpu
+fi
 
 if [ $? -eq 0 ]; then
     echo "✓ Dependencies installed"

@@ -7,6 +7,8 @@ import torch
 from barcode_detector import BarcodeDetector, BarcodeNet
 from PIL import Image, ImageDraw
 import numpy as np
+import tempfile
+import os
 
 def create_test_barcode_image(barcode_number, size=(224, 224)):
     """Create a simple test barcode image"""
@@ -104,12 +106,21 @@ def test_barcode_detection():
     test_barcode = "9876543210123"
     test_image = create_test_barcode_image(test_barcode)
     
-    # Save test image
-    test_image.save('/tmp/test_barcode.png')
-    print(f"Test barcode image saved to /tmp/test_barcode.png")
+    # Save test image to temporary file
+    with tempfile.NamedTemporaryFile(mode='wb', suffix='.png', delete=False) as tmp_file:
+        test_image.save(tmp_file.name)
+        tmp_path = tmp_file.name
+    
+    print(f"Test barcode image saved to {tmp_path}")
     
     # Test detection from file
-    result = detector.detect_from_file('/tmp/test_barcode.png')
+    result = detector.detect_from_file(tmp_path)
+    
+    # Clean up
+    try:
+        os.unlink(tmp_path)
+    except:
+        pass
     
     print(f"Test barcode: {test_barcode}")
     print(f"Detected: {result}")
