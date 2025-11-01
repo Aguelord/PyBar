@@ -2,6 +2,13 @@
 
 PyBar is an Android application built with Python that uses PyTorch neural networks to scan and recognize barcodes. The app captures barcode images using the device camera and extracts the barcode number using deep learning.
 
+> **🚀 Quick Start - 3 Simple Steps:**
+> 1. `python train_model.py` - Train the model
+> 2. `python build_apk.py` - Build the APK
+> 3. Install on Android
+>
+> See [SIMPLE_USAGE.md](SIMPLE_USAGE.md) for complete instructions | [GUIDE_SIMPLE.md](GUIDE_SIMPLE.md) pour le guide en français
+
 > **💻 Windows Users:** Building Android APKs on Windows requires WSL2 or Docker. See [WINDOWS_BUILD_GUIDE.md](WINDOWS_BUILD_GUIDE.md) for detailed instructions.
 
 ## Features
@@ -59,7 +66,23 @@ python main.py
 
 ### For Android APK Build
 
-#### On Linux
+#### Quick Method (Recommended)
+
+Use the Python build script which handles everything automatically:
+
+```bash
+python build_apk.py
+```
+
+This script will:
+- Check and install buildozer if needed
+- Verify system dependencies
+- Build the Android APK
+- On Windows, automatically use WSL if available
+
+The APK will be created in the `bin/` directory.
+
+#### Manual Method - On Linux
 
 1. Install Buildozer:
 ```bash
@@ -94,7 +117,16 @@ sudo apt-get install -y \
 
 #### On Windows
 
-**Recommended Method: WSL2 (Windows Subsystem for Linux)**
+**Recommended Method: Use the Python build script**
+
+Simply run:
+```bash
+python build_apk.py
+```
+
+The script will automatically detect WSL and use it to build the APK.
+
+**Requirements:** WSL2 must be installed. If not installed:
 
 1. Install WSL2 (if not already installed):
 ```powershell
@@ -103,16 +135,14 @@ wsl --install
 # Restart your computer after installation
 ```
 
-2. Run the Windows build script:
-```cmd
-build_apk.bat
+2. Run the build script:
+```bash
+python build_apk.py
 ```
-
-The script will automatically use WSL to build the APK.
 
 **📖 For detailed Windows instructions, see [WINDOWS_BUILD_GUIDE.md](WINDOWS_BUILD_GUIDE.md)**
 
-**Alternative Method 1: Docker**
+**Alternative Methods:**
 
 ```cmd
 # Pull Ubuntu image and run container
