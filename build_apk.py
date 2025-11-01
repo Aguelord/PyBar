@@ -132,7 +132,7 @@ def check_wsl_on_windows():
     if platform.system() != "Windows":
         return False
     
-    success, stdout, stderr = run_command("wsl --version", shell=True, check=False)
+    success, stdout, stderr = run_command(["wsl", "--version"], check=False)
     return success
 
 
@@ -143,8 +143,8 @@ def build_apk_wsl():
     print("Converting Windows path to WSL path...")
     current_dir = os.getcwd()
     
-    # Convert Windows path to WSL path
-    success, wsl_path, stderr = run_command(f'wsl wslpath -u "{current_dir}"', shell=True, check=False)
+    # Convert Windows path to WSL path using proper quoting
+    success, wsl_path, stderr = run_command(['wsl', 'wslpath', '-u', current_dir], check=False)
     
     if not success:
         print_error("Failed to convert path to WSL format")
@@ -155,11 +155,11 @@ def build_apk_wsl():
     
     # Check if buildozer is installed in WSL
     print("\nChecking buildozer in WSL...")
-    success, stdout, stderr = run_command('wsl bash -c "command -v buildozer"', shell=True, check=False)
+    success, stdout, stderr = run_command(['wsl', 'bash', '-c', 'command -v buildozer'], check=False)
     
     if not success:
         print_warning("Buildozer not found in WSL. Installing...")
-        success, stdout, stderr = run_command('wsl bash -c "pip3 install buildozer"', shell=True, check=False)
+        success, stdout, stderr = run_command(['wsl', 'bash', '-c', 'pip3 install buildozer'], check=False)
         if not success:
             print_error("Failed to install buildozer in WSL")
             return False
@@ -170,10 +170,11 @@ def build_apk_wsl():
     print("This may take 30-60 minutes on first build")
     print("(downloads Android SDK, NDK, and dependencies)\n")
     
-    build_cmd = f'wsl bash -c "cd {wsl_path} && buildozer android debug"'
+    # Use proper command list to avoid shell injection
+    build_cmd = ['wsl', 'bash', '-c', f'cd "{wsl_path}" && buildozer android debug']
     
     # Run without capturing output so user can see progress
-    result = subprocess.run(build_cmd, shell=True)
+    result = subprocess.run(build_cmd)
     
     return result.returncode == 0
 
