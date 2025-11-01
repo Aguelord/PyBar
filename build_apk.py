@@ -159,7 +159,7 @@ def build_apk_wsl():
     
     if not success:
         print_warning("Buildozer not found in WSL. Installing...")
-        success, stdout, stderr = run_command(['wsl', 'bash', '-c', 'pip3 install buildozer'], check=False)
+        success, stdout, stderr = run_command(['wsl', 'bash', '-c', 'pip3 install --user buildozer'], check=False)
         if not success:
             print_error("Failed to install buildozer in WSL")
             return False
@@ -171,6 +171,7 @@ def build_apk_wsl():
     print("(downloads Android SDK, NDK, and dependencies)\n")
     
     # Use proper command list to avoid shell injection
+    # The path is already validated by wslpath and we quote it in the bash command
     build_cmd = ['wsl', 'bash', '-c', f'cd "{wsl_path}" && buildozer android debug']
     
     # Run without capturing output so user can see progress

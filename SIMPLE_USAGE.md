@@ -60,7 +60,7 @@ Votre application PyBar est maintenant installée sur votre Android et prête à
 Pour plus d'informations, consultez :
 - [GUIDE_SIMPLE.md](GUIDE_SIMPLE.md) - Guide détaillé en français
 - [README.md](README.md) - Documentation technique complète
-- [WINDOWS_BUILD_GUIDE.md](WINDOWS_BUILD_GUIDE.md) - Guide spécifique Windows
+- [WINDOWS_BUILD_GUIDE.md](WINDOWS_BUILD_GUIDE.md) - Guide spécifique Windows (en anglais)
 
 ---
 
