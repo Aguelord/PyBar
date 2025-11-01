@@ -1,5 +1,7 @@
 # PyBar - Quick Start Guide
 
+> **💻 Utilisateurs Windows / Windows Users:** Pour des instructions détaillées sur la compilation APK sous Windows, voir [WINDOWS_BUILD_GUIDE.md](WINDOWS_BUILD_GUIDE.md)
+
 ## Installation rapide
 
 ### 1. Cloner le dépôt
@@ -9,11 +11,18 @@ cd PyBar
 ```
 
 ### 2. Installation automatique
+
+**Linux / macOS:**
 ```bash
 ./setup.sh
 ```
 
-Ou installation manuelle:
+**Windows:**
+```cmd
+setup.bat
+```
+
+**Ou installation manuelle:**
 ```bash
 pip install -r requirements.txt
 ```
@@ -36,11 +45,18 @@ python train_model.py
 ```
 
 ### Construire l'APK Android
+
+**Linux:**
 ```bash
 ./build_apk.sh
 ```
 
-Ou manuellement:
+**Windows:**
+```cmd
+build_apk.bat
+```
+
+**Ou manuellement:**
 ```bash
 buildozer android debug
 ```
@@ -88,12 +104,15 @@ Pour utiliser de vraies images:
 ## Compilation APK
 
 ### Prérequis
-- Linux (Ubuntu/Debian recommandé)
 - Python 3.8+
 - Git, Java, zip/unzip
 - Espace disque: ~5GB pour SDK/NDK
 
-### Installation des dépendances système
+**Important pour Windows:** Buildozer nécessite un environnement Linux pour compiler des APK Android.
+
+### Sur Linux
+
+#### Installation des dépendances système
 ```bash
 sudo apt-get install -y \
     python3-pip \
@@ -111,18 +130,100 @@ sudo apt-get install -y \
     zlib1g-dev
 ```
 
-### Première compilation
+#### Première compilation
 ```bash
 pip install buildozer
-buildozer android debug
+./build_apk.sh
 ```
 
 ⚠️ La première compilation prend 30-60 minutes (téléchargement SDK/NDK)
 
+### Sur Windows
+
+**Méthode recommandée: WSL2 (Windows Subsystem for Linux)**
+
+1. **Installer WSL2** (si pas déjà installé):
+   ```powershell
+   # Ouvrir PowerShell en tant qu'administrateur
+   wsl --install
+   # Redémarrer l'ordinateur après installation
+   ```
+
+2. **Vérifier l'installation WSL**:
+   ```cmd
+   wsl --version
+   ```
+
+3. **Installer les dépendances dans WSL**:
+   ```cmd
+   wsl
+   # Dans WSL:
+   sudo apt-get update
+   sudo apt-get install -y python3-pip build-essential git \
+       libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
+       libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+   ```
+
+4. **Construire l'APK**:
+   ```cmd
+   # Dans Windows CMD ou PowerShell
+   build_apk.bat
+   ```
+
+Le script détectera automatiquement WSL et l'utilisera pour la compilation.
+
+**Alternative 1: Docker Desktop**
+
+Si vous avez Docker Desktop installé sur Windows:
+
+```cmd
+# Télécharger l'image Ubuntu
+docker pull ubuntu:22.04
+
+# Lancer le conteneur avec le dossier du projet monté
+docker run -v %CD%:/app -w /app -it ubuntu:22.04 bash
+
+# Dans le conteneur:
+apt-get update && apt-get install -y python3-pip git build-essential \
+    libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
+    libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+
+pip3 install buildozer
+./build_apk.sh
+```
+
+**Alternative 2: Machine virtuelle Linux**
+
+Utiliser VirtualBox, VMware, ou Hyper-V avec Ubuntu 22.04 ou Debian 11.
+
+**Alternative 3: Buildozer natif Windows (Support limité)**
+
+⚠️ Le support natif de Buildozer sur Windows est limité et peut rencontrer des problèmes.
+
+```cmd
+pip install buildozer
+buildozer android debug
+```
+
+**Note:** Cette méthode peut ne pas fonctionner correctement. WSL2 ou Docker sont fortement recommandés.
+
+### Sur macOS
+
+macOS nécessite également un environnement Linux pour compiler des APK Android:
+
+- **Docker Desktop**: Utiliser la méthode Docker décrite ci-dessus
+- **Machine virtuelle**: VirtualBox, Parallels, UTM avec Linux
+- **Instance cloud**: AWS, GCP, Azure avec Ubuntu
+
 ### Installation sur appareil
+
+Une fois l'APK construit:
+
 ```bash
 adb install bin/pybar-1.0-arm64-v8a-debug.apk
 ```
+
+Ou transférer l'APK sur votre appareil et l'installer manuellement.
 
 ## Utilisation de l'application
 
@@ -187,6 +288,19 @@ Pour améliorer la détection:
 - Consulter les logs buildozer
 - Augmenter l'espace disque
 - Essayer avec buildozer clean
+- **Windows:** Vérifier que WSL2 est correctement installé
+- **Windows:** S'assurer que les dépendances Linux sont installées dans WSL
+
+**Erreurs WSL sur Windows**
+- Vérifier que WSL2 est installé: `wsl --version`
+- Mettre à jour WSL: `wsl --update`
+- Réinstaller la distribution: `wsl --install -d Ubuntu-22.04`
+- Vérifier l'intégration Docker-WSL si vous utilisez Docker
+
+**Erreur Docker sur Windows**
+- Activer l'intégration WSL2 dans Docker Desktop
+- Augmenter la RAM allouée à Docker (Paramètres > Resources)
+- Vérifier que la virtualisation est activée dans le BIOS
 
 **Erreur "module not found"**
 - Réinstaller les dépendances
