@@ -274,6 +274,8 @@ def main():
         if os.path.exists(bin_dir):
             apk_files = [f for f in os.listdir(bin_dir) if f.endswith('.apk')]
             if apk_files:
+                # Sort by modification time to get the most recent
+                apk_files.sort(key=lambda f: os.path.getmtime(os.path.join(bin_dir, f)), reverse=True)
                 apk_path = os.path.join(bin_dir, apk_files[0])
                 print(f"APK location: {apk_path}\n")
                 

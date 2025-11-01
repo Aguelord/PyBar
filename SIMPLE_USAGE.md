@@ -37,11 +37,11 @@ Ce script construit l'application Android (fichier .apk).
 
 **Option Simple - Via USB :**
 ```bash
-adb install bin/pybar-1.0-arm64-v8a-debug.apk
+adb install bin/*.apk
 ```
 
 **Option Alternative - Transfert Manuel :**
-1. Copiez le fichier APK sur votre téléphone (USB, email, ou cloud)
+1. Copiez le fichier APK (dans `bin/`) sur votre téléphone (USB, email, ou cloud)
 2. Ouvrez le fichier APK sur votre téléphone
 3. Autorisez l'installation et suivez les instructions
 
@@ -97,11 +97,11 @@ This script builds the Android application (.apk file).
 
 **Simple Option - Via USB:**
 ```bash
-adb install bin/pybar-1.0-arm64-v8a-debug.apk
+adb install bin/*.apk
 ```
 
 **Alternative Option - Manual Transfer:**
-1. Copy the APK file to your phone (USB, email, or cloud)
+1. Copy the APK file (in `bin/`) to your phone (USB, email, or cloud)
 2. Open the APK file on your phone
 3. Allow installation and follow the prompts
 
@@ -161,7 +161,7 @@ python train_model.py
 python build_apk.py
 
 # 3. Install on Android / Installer sur Android
-adb install bin/pybar-1.0-arm64-v8a-debug.apk
+adb install bin/*.apk
 ```
 
 ---

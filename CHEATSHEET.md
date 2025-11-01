@@ -16,7 +16,7 @@ python build_apk.py
 
 ### 3️⃣ Installer / Install
 ```bash
-adb install bin/pybar-1.0-arm64-v8a-debug.apk
+adb install bin/*.apk
 ```
 ou/or copier manuellement sur Android / manually copy to Android
 

@@ -100,12 +100,12 @@ Vous avez **3 options** pour installer l'APK sur votre appareil Android :
 
 3. Installez l'APK :
 ```bash
-adb install bin/pybar-1.0-arm64-v8a-debug.apk
+adb install bin/*.apk
 ```
 
 #### Option B : Transfert Manuel
 
-1. Copiez le fichier APK sur votre téléphone :
+1. Copiez le fichier APK (situé dans le dossier `bin/`) sur votre téléphone :
    - Via USB (copier le fichier dans le dossier Téléchargements)
    - Via email (envoyez-vous l'APK par email)
    - Via cloud (Google Drive, Dropbox, etc.)
@@ -163,7 +163,7 @@ python train_model.py
 python build_apk.py
 
 # 3. Installer sur Android (option USB)
-adb install bin/pybar-1.0-arm64-v8a-debug.apk
+adb install bin/*.apk
 ```
 
 C'est aussi simple que ça ! 🎉
