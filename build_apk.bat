@@ -8,12 +8,8 @@ echo PyBar Android APK Build Script (Windows)
 echo ========================================
 echo.
 
-REM Check if running in WSL
-if exist /proc/version (
-    echo Running in WSL environment
-    bash build_apk.sh
-    exit /b %ERRORLEVEL%
-)
+REM Note: If this script is run directly inside WSL, it will be detected by the shell
+REM and the bash script should be used instead. This script is for Windows CMD/PowerShell.
 
 REM Check if WSL is available
 wsl --version >nul 2>&1
@@ -66,8 +62,11 @@ echo This may take 30-60 minutes on first build
 echo ^(downloads Android SDK, NDK, and dependencies^)
 echo.
 
+REM Get the WSL path for the current directory
+for /f "delims=" %%i in ('wsl wslpath -u "%CD%"') do set WSLPATH=%%i
+
 REM Change to the script directory and run build_apk.sh in WSL
-wsl bash -c "cd '%CD%' && ./build_apk.sh"
+wsl bash -c "cd '%WSLPATH%' && ./build_apk.sh"
 
 if %ERRORLEVEL% equ 0 (
     echo.
@@ -94,7 +93,7 @@ if %ERRORLEVEL% equ 0 (
     echo.
     echo To troubleshoot in WSL:
     echo   wsl bash
-    echo   cd %CD%
+    echo   cd ^<your project path^>
     echo   ./build_apk.sh
     echo.
     exit /b 1

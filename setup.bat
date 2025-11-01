@@ -45,13 +45,15 @@ echo NOTE: For Android APK building, you will need WSL or Docker.
 echo This setup only installs dependencies for desktop development.
 echo.
 
-REM Check if CUDA is available for GPU support
+REM Install dependencies - PyTorch installation is the same from requirements.txt
+REM For CPU-only PyTorch on systems without CUDA, use a different index URL
 where nvidia-smi >nul 2>&1
 if %ERRORLEVEL% equ 0 (
     echo NVIDIA GPU detected, installing PyTorch with CUDA support
     pip install -r requirements.txt
 ) else (
     echo No NVIDIA GPU detected, installing CPU-only PyTorch
+    pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
     pip install -r requirements.txt
 )
 

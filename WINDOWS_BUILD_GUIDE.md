@@ -259,7 +259,7 @@ Au lieu de travailler depuis `/mnt/c/`, clonez le projet directement dans WSL:
 ```bash
 # Dans WSL
 cd ~
-git clone https://github.com/Aguelord/PyBar.git
+git clone https://github.com/Aguelord/PyBar.git  # Or your fork URL
 cd PyBar
 
 # Installer les dépendances
@@ -564,7 +564,7 @@ Instead of working from `/mnt/c/`, clone the project directly in WSL:
 ```bash
 # In WSL
 cd ~
-git clone https://github.com/Aguelord/PyBar.git
+git clone https://github.com/Aguelord/PyBar.git  # Or your fork URL
 cd PyBar
 
 # Install dependencies
