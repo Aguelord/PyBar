@@ -2,6 +2,8 @@
 
 PyBar is an Android application built with Python that uses PyTorch neural networks to scan and recognize barcodes. The app captures barcode images using the device camera and extracts the barcode number using deep learning.
 
+> **💻 Windows Users:** Building Android APKs on Windows requires WSL2 or Docker. See [WINDOWS_BUILD_GUIDE.md](WINDOWS_BUILD_GUIDE.md) for detailed instructions.
+
 ## Features
 
 - 📷 Real-time camera preview for barcode scanning
@@ -57,12 +59,14 @@ python main.py
 
 ### For Android APK Build
 
+#### On Linux
+
 1. Install Buildozer:
 ```bash
 pip install buildozer
 ```
 
-2. Install Android SDK and NDK dependencies (Linux):
+2. Install Android SDK and NDK dependencies:
 ```bash
 sudo apt-get install -y \
     python3-pip \
@@ -82,10 +86,54 @@ sudo apt-get install -y \
 
 3. Build the APK:
 ```bash
-buildozer android debug
+./build_apk.sh
+# or manually: buildozer android debug
 ```
 
 4. The APK will be in `bin/` directory
+
+#### On Windows
+
+**Recommended Method: WSL2 (Windows Subsystem for Linux)**
+
+1. Install WSL2 (if not already installed):
+```powershell
+# Run in PowerShell as Administrator
+wsl --install
+# Restart your computer after installation
+```
+
+2. Run the Windows build script:
+```cmd
+build_apk.bat
+```
+
+The script will automatically use WSL to build the APK.
+
+**📖 For detailed Windows instructions, see [WINDOWS_BUILD_GUIDE.md](WINDOWS_BUILD_GUIDE.md)**
+
+**Alternative Method 1: Docker**
+
+```cmd
+# Pull Ubuntu image and run container
+docker run -v %CD%:/app -w /app -it ubuntu:22.04 bash
+
+# Inside the container:
+apt-get update && apt-get install -y python3-pip git build-essential
+pip3 install buildozer
+./build_apk.sh
+```
+
+**Alternative Method 2: Native Windows (Limited Support)**
+
+Buildozer has limited support for native Windows builds. For best results, use WSL2 or Docker.
+
+#### On macOS
+
+Building Android APKs on macOS requires a Linux environment:
+- Use Docker (see Windows Docker method above)
+- Use a Linux VM (VirtualBox, Parallels, etc.)
+- Use a cloud Linux instance
 
 ## Usage
 
@@ -171,6 +219,21 @@ The app requires the following Android permissions:
 - Ensure all buildozer dependencies are installed
 - Check Android SDK/NDK paths
 - Review buildozer logs for specific errors
+- **Windows users**: Ensure WSL2 is properly installed and configured
+- **Windows users**: Verify Linux dependencies are installed inside WSL
+- **Docker users**: Increase RAM allocation in Docker settings
+
+### WSL issues on Windows
+- Verify WSL2 is installed: `wsl --version`
+- Update WSL: `wsl --update`
+- Reinstall distribution: `wsl --install -d Ubuntu-22.04`
+- Enable virtualization in BIOS if WSL fails to start
+- Check Docker-WSL integration if using Docker
+
+### Build script not executing on Windows
+- Ensure you're using `build_apk.bat` not `build_apk.sh`
+- Run from Command Prompt or PowerShell, not Git Bash
+- If using WSL directly, ensure line endings are correct: `dos2unix build_apk.sh`
 
 ## Future Enhancements
 
