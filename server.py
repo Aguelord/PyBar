@@ -95,7 +95,8 @@ def detect_barcode():
         print(f"Error processing image: {e}")
         import traceback
         traceback.print_exc()
-        return jsonify({'error': str(e)}), 500
+        # Don't expose internal error details to client in production
+        return jsonify({'error': 'Internal server error processing image'}), 500
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -112,4 +113,6 @@ if __name__ == '__main__':
     
     # Run server
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    # Debug mode should only be enabled in development
+    debug_mode = os.environ.get('FLASK_ENV') == 'development'
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
