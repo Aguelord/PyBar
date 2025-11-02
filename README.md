@@ -1,18 +1,27 @@
-# PyBar - Neural Network Barcode Scanner for Android
+# PyBar - Neural Network Barcode Scanner
 
-PyBar is an Android application built with Python that uses PyTorch neural networks to scan and recognize barcodes. The app captures barcode images using the device camera and extracts the barcode number using deep learning.
+PyBar is a web application optimized for Android devices that uses PyTorch neural networks to scan and recognize barcodes. The app consists of a responsive web interface that captures photos using the device camera and a Python server that processes images using deep learning.
 
-> **🚀 Quick Start - 3 Simple Steps:**
-> 1. `python train_model.py` - Train the model
-> 2. `python build_apk.py` - Build the APK
-> 3. Install on Android
+> **🚀 Quick Start - Web Application (Recommended):**
+> 1. `python setup_model.py` - Train the model (if not already trained)
+> 2. `python server.py` - Start the server
+> 3. Open browser to `http://localhost:5000`
 >
-> See [SIMPLE_USAGE.md](SIMPLE_USAGE.md) for complete instructions | [GUIDE_SIMPLE.md](GUIDE_SIMPLE.md) pour le guide en français
+> See [WEBAPP_README.md](WEBAPP_README.md) for complete web app documentation
 
-> **💻 Windows Users:** Building Android APKs on Windows requires WSL2 or Docker. See [WINDOWS_BUILD_GUIDE.md](WINDOWS_BUILD_GUIDE.md) for detailed instructions.
+> **📱 Legacy Android APK:** The original Kivy-based Android APK version is still available. See [SIMPLE_USAGE.md](SIMPLE_USAGE.md) for APK build instructions.
 
 ## Features
 
+### Web Application (New!)
+- 📱 **Optimized for Android** devices with responsive design
+- 📷 **Camera access** with automatic back camera selection
+- 🌐 **Client-server architecture** for better performance
+- 🧠 **Pre-trained PyTorch model** on server
+- ⚡ **Fast inference** on server with GPU support
+- 🎨 **Modern UI** with real-time feedback
+
+### Legacy Features (APK version)
 - 📷 Real-time camera preview for barcode scanning
 - 🧠 PyTorch-based neural network for barcode recognition
 - 📱 Native Android APK support via Kivy/Buildozer
@@ -21,7 +30,29 @@ PyBar is an Android application built with Python that uses PyTorch neural netwo
 
 ## Architecture
 
-The application uses:
+### Web Application Architecture (Recommended)
+
+```
+┌─────────────────┐         ┌─────────────────┐
+│   Web Browser   │         │  Python Server  │
+│   (Android)     │ HTTPS   │   Flask API     │
+│                 │────────>│                 │
+│  - Camera       │         │  - PyTorch      │
+│  - Capture      │<────────│  - BarcodeNet   │
+│  - Display      │  JSON   │  - Detection    │
+└─────────────────┘         └─────────────────┘
+```
+
+The web application uses:
+- **HTML5/CSS3/JavaScript**: Responsive web interface
+- **MediaDevices API**: Camera access
+- **Flask**: Python web framework for the server
+- **PyTorch**: Neural network inference on the server
+- **torchvision**: Image preprocessing and ResNet18 model
+
+### Legacy APK Architecture
+
+The original application uses:
 - **Kivy**: For the Android UI and camera interface
 - **PyTorch**: For the neural network inference
 - **torchvision**: For image preprocessing and model architecture
@@ -31,17 +62,55 @@ The application uses:
 
 ```
 PyBar/
-├── main.py                 # Main Kivy application
+├── server.py                # Flask server application (NEW)
+├── static/                  # Web application files (NEW)
+│   ├── index.html          # Main HTML page
+│   ├── style.css           # Responsive styles
+│   └── app.js              # JavaScript application logic
 ├── barcode_detector.py     # PyTorch neural network detector
-├── train_model.py         # Model training script
-├── requirements.txt       # Python dependencies
-├── buildozer.spec         # Android build configuration
-└── README.md             # This file
+├── train_model.py          # Model training script
+├── setup_model.py          # Model setup helper (NEW)
+├── test_server.py          # Server API tests (NEW)
+├── requirements-server.txt # Server dependencies (NEW)
+├── WEBAPP_README.md        # Web app documentation (NEW)
+├── main.py                 # Legacy Kivy application
+├── requirements.txt        # Legacy Kivy dependencies
+├── buildozer.spec          # Legacy Android build configuration
+└── README.md              # This file
 ```
 
 ## Installation & Setup
 
-### For Development (Desktop)
+### Web Application (Recommended)
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Aguelord/PyBar.git
+cd PyBar
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements-server.txt
+```
+
+3. Setup the pre-trained model:
+```bash
+python setup_model.py
+```
+
+4. Start the server:
+```bash
+python server.py
+```
+
+5. Access the application:
+   - **Local**: Open browser to `http://localhost:5000`
+   - **Android (same network)**: `http://YOUR_IP:5000`
+   
+For detailed instructions, see [WEBAPP_README.md](WEBAPP_README.md)
+
+### Legacy APK Build (For Development)
 
 1. Clone the repository:
 ```bash
@@ -167,6 +236,20 @@ Building Android APKs on macOS requires a Linux environment:
 
 ## Usage
 
+### Web Application
+
+1. **Open the web app** in your browser (mobile or desktop)
+2. **Allow camera permissions** when prompted
+3. **Point the camera** at a barcode
+4. **Press "📸 Capturer"** to take a photo
+5. **Press "🔍 Analyser"** to detect the barcode
+6. The barcode number will be displayed
+7. Press **"🔄 Réessayer"** to scan another barcode
+
+For detailed usage, API documentation, and deployment instructions, see [WEBAPP_README.md](WEBAPP_README.md)
+
+### Legacy APK Application
+
 1. **Launch the app** on your Android device
 2. **Point the camera** at a barcode
 3. **Press "Scan Barcode"** button
@@ -175,7 +258,20 @@ Building Android APKs on macOS requires a Linux environment:
 
 ## How It Works
 
-### Barcode Detection Pipeline
+### Web Application Architecture
+
+1. **Camera Capture**: Browser accesses device camera via MediaDevices API
+2. **Image Capture**: JavaScript captures photo from video stream as base64
+3. **Upload to Server**: Image sent to Flask server via HTTP POST
+4. **Preprocessing**: Server converts and resizes image using PIL
+5. **Neural Network Inference**: 
+   - PyTorch model detects if a barcode is present
+   - Predicts each digit position (0-9)
+6. **Decoding**: Server converts predictions to barcode number
+7. **Response**: Result sent back to browser as JSON
+8. **Display**: JavaScript shows the result to the user
+
+### Legacy APK Pipeline
 
 1. **Camera Capture**: Captures frame from device camera
 2. **Preprocessing**: Resizes and normalizes the image
@@ -194,18 +290,28 @@ The `BarcodeNet` model consists of:
 
 ## Training Your Own Model
 
-The included `train_model.py` script generates synthetic barcode images for training:
+### Using the Setup Script (Recommended)
+
+```bash
+python setup_model.py
+```
+
+This script will:
+- Check if a model already exists
+- Train a new model if needed
+- Generate 5000 training samples with synthetic barcodes
+- Train for 20 epochs
+- Save the best model to `barcode_model.pth` (~45 MB)
+
+### Manual Training
+
+The included `train_model.py` script can also be used directly:
 
 ```bash
 python train_model.py
 ```
 
-This will:
-- Generate 5000 training samples with synthetic barcodes
-- Train for 20 epochs
-- Save the best model to `barcode_model.pth`
-
-To use real barcode images, modify the `SyntheticBarcodeDataset` class to load your dataset.
+To use real barcode images, modify the `SyntheticBarcodeDataset` class in `train_model.py` to load your dataset.
 
 ## Model Performance
 
@@ -217,15 +323,29 @@ The synthetic training provides a baseline model. For production use:
 
 ## Requirements
 
+### Web Application
+- Python 3.8+
+- PyTorch 2.0+
+- Flask 2.3+
+- Modern web browser with camera support
+- HTTPS for remote access (camera API requirement)
+
+### Legacy APK
 - Python 3.8+
 - PyTorch 2.0+
 - Kivy 2.2+
-- Android device with camera (for APK)
+- Android device with camera
 - 2GB RAM minimum
 - Android 5.0+ (API 21+)
 
 ## Permissions
 
+### Web Application
+The web app requires:
+- **Camera access**: Browser permission for camera API
+- **HTTPS**: Required for camera access on remote devices (not needed for localhost)
+
+### Legacy APK
 The app requires the following Android permissions:
 - `CAMERA`: To access device camera
 - `WRITE_EXTERNAL_STORAGE`: To save images (optional)
@@ -234,18 +354,45 @@ The app requires the following Android permissions:
 
 ## Troubleshooting
 
-### Camera not working
+### Web Application
+
+**Camera not accessible**
+- Ensure browser has camera permissions
+- For remote access, use HTTPS (not needed for localhost)
+- Check if another app/tab is using the camera
+- Try a different browser
+
+**Server connection error**
+- Verify the server is running: `python server.py`
+- Check firewall settings allow port 5000
+- Ensure correct IP address and port
+- Check server logs for errors
+
+**Model not detecting barcodes**
+- Ensure good lighting conditions
+- Hold barcode steady and in focus
+- Try different angles
+- Make sure barcode is supported (8-13 digits)
+- Check if model is loaded: visit `/api/health`
+
+**Model not found error**
+- Run `python setup_model.py` to train/generate the model
+- Ensure `barcode_model.pth` exists in project root
+
+### Legacy APK
+
+**Camera not working**
 - Ensure camera permissions are granted
 - Check if another app is using the camera
 - Restart the app
 
-### Model not detecting barcodes
+**Model not detecting barcodes**
 - Ensure good lighting conditions
 - Hold barcode steady and in focus
 - Train model with more diverse data
 - Check if barcode is supported format
 
-### APK build fails
+**APK build fails**
 - Ensure all buildozer dependencies are installed
 - Check Android SDK/NDK paths
 - Review buildozer logs for specific errors
@@ -253,26 +400,34 @@ The app requires the following Android permissions:
 - **Windows users**: Verify Linux dependencies are installed inside WSL
 - **Docker users**: Increase RAM allocation in Docker settings
 
-### WSL issues on Windows
+**WSL issues on Windows**
 - Verify WSL2 is installed: `wsl --version`
 - Update WSL: `wsl --update`
 - Reinstall distribution: `wsl --install -d Ubuntu-22.04`
 - Enable virtualization in BIOS if WSL fails to start
 - Check Docker-WSL integration if using Docker
 
-### Build script not executing on Windows
+**Build script not executing on Windows**
 - Ensure you're using `build_apk.bat` not `build_apk.sh`
 - Run from Command Prompt or PowerShell, not Git Bash
 - If using WSL directly, ensure line endings are correct: `dos2unix build_apk.sh`
 
 ## Future Enhancements
 
+### Web Application
+- [ ] Progressive Web App (PWA) support for offline usage
+- [ ] Image history and database
+- [ ] Batch barcode scanning
+- [ ] Export scanned barcodes (CSV, JSON)
+- [ ] Production deployment guides (Heroku, AWS, Docker)
+- [ ] GPU acceleration support documentation
+
+### General
 - [ ] Support for QR codes
 - [ ] Real-time continuous scanning
-- [ ] Barcode history and database
-- [ ] Export scanned barcodes
 - [ ] Multi-language OCR for text under barcodes
 - [ ] Better model with more training data
+- [ ] Support for more barcode formats (Code 128, Code 39, etc.)
 
 ## Contributing
 

@@ -1,5 +1,69 @@
 # PyBar - Quick Start Guide
 
+This guide will help you get started with PyBar. Choose between the **Web Application** (recommended) or the **Legacy Android APK**.
+
+---
+
+## 🌐 Web Application (Recommended)
+
+The web application is the easiest way to use PyBar on Android devices.
+
+### Installation rapide
+
+#### 1. Cloner le dépôt
+```bash
+git clone https://github.com/Aguelord/PyBar.git
+cd PyBar
+```
+
+#### 2. Installer les dépendances
+```bash
+pip install -r requirements-server.txt
+```
+
+#### 3. Générer le modèle pré-entraîné
+```bash
+python setup_model.py
+```
+
+#### 4. Démarrer le serveur
+```bash
+python server.py
+```
+
+#### 5. Accéder à l'application
+
+**Sur le même ordinateur:**
+```
+http://localhost:5000
+```
+
+**Sur Android (même réseau WiFi):**
+1. Trouver l'adresse IP de votre ordinateur:
+   - Linux/Mac: `ifconfig` ou `ip addr`
+   - Windows: `ipconfig`
+2. Sur Android, ouvrir le navigateur et aller à:
+   ```
+   http://VOTRE_IP:5000
+   ```
+
+### Utilisation
+
+1. **Autoriser** l'accès à la caméra dans le navigateur
+2. **Pointer** la caméra vers un code-barres
+3. **Appuyer** sur "📸 Capturer"
+4. **Appuyer** sur "🔍 Analyser"
+5. **Lire** le numéro de code-barres affiché
+
+### Documentation complète
+
+- [WEBAPP_README.md](WEBAPP_README.md) - Documentation détaillée de l'application web
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Guide de déploiement en production
+
+---
+
+## 📱 Legacy Android APK
+
 > **💻 Utilisateurs Windows / Windows Users:** Pour des instructions détaillées sur la compilation APK sous Windows, voir [WINDOWS_BUILD_GUIDE.md](WINDOWS_BUILD_GUIDE.md)
 
 ## Installation rapide
