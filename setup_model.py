@@ -6,7 +6,13 @@ This should be run before starting the server if barcode_model.pth doesn't exist
 
 import os
 import sys
-from train_model import train_model
+
+try:
+    from train_model import train_model
+except ImportError as e:
+    print(f"Error: Unable to import train_model module: {e}")
+    print("Please ensure train_model.py exists and is accessible.")
+    sys.exit(1)
 
 MODEL_PATH = 'barcode_model.pth'
 

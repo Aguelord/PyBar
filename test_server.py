@@ -125,7 +125,7 @@ def run_tests(base_url="http://localhost:5000"):
     # Check if server is running
     try:
         requests.get(base_url, timeout=2)
-    except:
+    except requests.RequestException:
         print("\n✗ Error: Server is not running!")
         print(f"   Please start the server with: python server.py")
         return False

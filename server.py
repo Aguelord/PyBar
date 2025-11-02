@@ -11,6 +11,7 @@ from PIL import Image
 import io
 import os
 import base64
+import tempfile
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 CORS(app)  # Enable CORS for cross-origin requests
@@ -61,7 +62,10 @@ def detect_barcode():
         image = Image.open(io.BytesIO(image_bytes)).convert('RGB')
         
         # Save temporarily for processing
-        temp_path = '/tmp/temp_barcode.jpg'
+        import tempfile
+        temp_file = tempfile.NamedTemporaryFile(mode='wb', suffix='.jpg', delete=False)
+        temp_path = temp_file.name
+        temp_file.close()
         image.save(temp_path)
         
         # Detect barcode
@@ -73,7 +77,7 @@ def detect_barcode():
         # Clean up temp file
         try:
             os.remove(temp_path)
-        except:
+        except OSError:
             pass
         
         if barcode_number:

@@ -26,7 +26,7 @@ async function init() {
         // Request camera access with back camera preference (for mobile)
         const constraints = {
             video: {
-                facingMode: { ideal: 'environment' }, // Use back camera on mobile
+                facingMode: { ideal: 'environment' }, // Use back (rear-facing) camera on mobile
                 width: { ideal: 1280 },
                 height: { ideal: 720 }
             }
