@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>PyBar - Scanner de Codes-Barres</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📷 PyBar</h1>
+            <p class="subtitle">Scanner de Codes-Barres Neural</p>
+        </header>
+
+        <main>
+            <!-- Camera preview area -->
+            <div id="camera-container" class="camera-container">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas" style="display: none;"></canvas>
+            </div>
+
+            <!-- Preview of captured image -->
+            <div id="preview-container" class="preview-container" style="display: none;">
+                <img id="preview-image" alt="Image capturée">
+            </div>
+
+            <!-- Result display -->
+            <div id="result" class="result">
+                <p id="result-text">Pointez la caméra vers un code-barres</p>
+            </div>
+
+            <!-- Control buttons -->
+            <div class="controls">
+                <button id="capture-btn" class="btn btn-primary">
+                    📸 Capturer
+                </button>
+                <button id="scan-btn" class="btn btn-success" style="display: none;">
+                    🔍 Analyser
+                </button>
+                <button id="retry-btn" class="btn btn-secondary" style="display: none;">
+                    🔄 Réessayer
+                </button>
+            </div>
+
+            <!-- Loading indicator -->
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyse en cours...</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Propulsé par PyTorch Neural Networks</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
